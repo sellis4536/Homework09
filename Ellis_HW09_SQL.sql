@@ -131,7 +131,6 @@ SELECT first_name, last_name, sum(amount) as 'Total Ampount Paid' from customer
 /*
 7a. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
 */
-
 SELECT f.title from film as f
 	WHERE f.title LIKE 'k%' or f.title like'q%'
 		AND (select l.name
@@ -139,13 +138,13 @@ SELECT f.title from film as f
 		WHERE l.name = 'English');
 
 /*
-7b. NOT FUNCTIONING -- Use subqueries to display all actors who appear in the film Alone Trip.
+7b. Use subqueries to display all actors who appear in the film Alone Trip.
 */
- SELECT first_name, last_name from actor as a
+SELECT first_name, last_name from actor as a
 	WHERE actor_id IN
-		(select fa.actor_id from film_actor as fa
+	(select fa.actor_id from film_actor as fa
 		WHERE (select film_id from film  as f
-			WHERE title = 'ALONE TRIP'));
+				WHERE title = 'ALONE TRIP'));
 
 /* 
 7c. Select names and email addresses of all Canadian customer using joins
