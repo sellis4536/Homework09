@@ -1,76 +1,82 @@
 /*
+Steve Ellis, Homework 09, SQL
+*/
+
+
+
+/*
 1a -- list first_name, last_name from table actor
 */
-select first_name, last_name from actor;
+SELECT first_name, last_name from actor;
 
 /*
 1b -- list first_name last_name, ALL CAPS in a single column from table actor
 */
-select CONCAT(UPPER(first_name), ' ', UPPER(last_name)) as FNF_CAPS from actor;
+SELECT CONCAT(UPPER(first_name), ' ', UPPER(last_name)) as FNF_CAPS from actor;
 
 /*
 2a -- list ID, first_name, last_name where first_name = 'Joe' from table actor
 */
-select actor_id, first_name, last_name from actor
-	where first_name = 'Joe';
+SELECT actor_id, first_name, last_name from actor
+	WHERE first_name = 'Joe';
 
 /*
 2b. Find all actors whose last name contain the letters 'GEN' from table actor
 */
-select actor_id, first_name, last_name from actor
-	where last_name LIKE '%GEN%';
+SELECT actor_id, first_name, last_name from actor
+	WHERE last_name LIKE '%GEN%';
     
 /*
 2c. Find all actors whose last name contain the letters 'LI',
 	order by last_name, first_name1 from table actor
 */
-select actor_id, first_name, last_name from actor
-	where last_name LIKE '%LI%'
-    order by last_name, first_name;
+SELECT actor_id, first_name, last_name from actor
+	WHERE last_name LIKE '%LI%'
+    ORDER by last_name, first_name;
     
 /* 
 2d. Using IN, display the country_id and country columns of the following
 	countries: Afghanistan, Bangladesh, and China from table country 
 */
-select country_id, country from country
-	where country in ('Afghanistan', 'Bangladesh', 'China');
+SELECT country_id, country from country
+	WHERE country IN ('Afghanistan', 'Bangladesh', 'China');
 
 /*
 3a. ALTER TABLE actor to add column for 'description' with DTYPE BLOB
 */
 ALTER TABLE actor
-	add (description BLOB);
+	ADD (description BLOB);
 
 /*
 3b. DROP newly created description column from table actor
 */
 
 ALTER TABLE actor
-	drop description;
+	DROP description;
 
 /*
 4a. List the last names of actors, as well as how many actors have that last name from actor
 */
-select distinct(last_name), count(*) as LnCount from actor
-	group by last_name
-    order by LnCount desc;
+SELECT distinct(last_name), count(*) as LnCount from actor
+	GROUP BY last_name
+    ORDER BY LnCount desc;
     
 /*
 4b. List last names of actors and the number of actors who have that last name, 
 	but only for names that are shared by at least two actors from table actor
 */
-select distinct(last_name), count(*) as LnCount from actor
-    group by last_name
-    having count(*) > 1
-    order by LnCount ASC;
+SELECT distinct(last_name), count(*) as LnCount from actor
+    GROUP BY last_name
+    HAVING count(*) > 1
+    ORDER BY LnCount ASC;
     
 /*
 4c. Update table actor record  where last_name 'WILLIAMS', first_name 'GROUCHO'  to first_name 'HARPO'
 */
 UPDATE actor
 	SET first_name = (CASE WHEN first_name = 'GROUCHO' THEN 'HARPO' ELSE first_name END)
-    where last_name = 'WILLIAMS'
-	and first_name = 'GROUCHO';
+    WHERE last_name = 'WILLIAMS'
+	AND first_name = 'GROUCHO';
     
 /*
 4d. ERROR IN PREVIOUS LINE, Update table actor record where last_name 'WILLIAMS', first_name 'HARPO' back to first_name 'GROUCHO'
@@ -89,7 +95,7 @@ SHOW CREATE TABLE sakila.address;
 /*
 6a. Use JOIN to display the first and last names, as well as the address, of each staff member. Use the tables staff and address:
 */
-select first_name, last_name, address from staff
+SELECT first_name, last_name, address from staff
 	INNER JOIN address on staff.address_id = address.address_id;
 
 /*
@@ -123,18 +129,17 @@ SELECT first_name, last_name, sum(amount) as 'Total Ampount Paid' from customer
     ORDER BY last_name;
 
 /*
-7a. rs K and Q have also soared in popularity. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
+7a. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
 */
 
-SELECT f.title
-	FROM film as f
+SELECT f.title from film as f
 	WHERE f.title LIKE 'k%' or f.title like'q%'
 		AND (select l.name
 		FROM language as l
 		WHERE l.name = 'English');
 
 /*
-7b. Use subqueries to display all actors who appear in the film Alone Trip.
+7b. NOT FUNCTIONING -- Use subqueries to display all actors who appear in the film Alone Trip.
 */
  SELECT first_name, last_name from actor as a
 	WHERE actor_id IN
@@ -198,7 +203,7 @@ SELECT cat.name, sum(p.amount) as 'Gross Rev.' from category as cat
     LIMIT 5;
 
 /*
-8a.  Create a view using the querey above (7h.)
+8a.  Create view, TOP_5_GROSSING_TITLES, using the querey above (7h.)
 */
 CREATE VIEW TOP_5_GROSSING_TITLES AS
 SELECT cat.name, sum(p.amount) as 'Gross Rev.' from category as cat
@@ -216,7 +221,7 @@ SELECT cat.name, sum(p.amount) as 'Gross Rev.' from category as cat
 SELECT * from sakila.TOP_5_GROSSING_TITLES;
 
 /*
-8c. Delete the view  TOP_5_GROSSING_TITLES
+8c. Delete the view TOP_5_GROSSING_TITLES
 */
 DROP VIEW sakila.TOP_5_GROSSING_TITLES
 
